@@ -7,3 +7,7 @@ for letra in texto:
 else:
     print() #adiciona uma quebra de linha
     print("Executa no final do laço")
+
+
+for numero in range(0, 51, 5):
+    print(numero, end=" ")
