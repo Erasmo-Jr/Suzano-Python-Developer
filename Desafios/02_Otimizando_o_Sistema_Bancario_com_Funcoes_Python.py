@@ -27,14 +27,20 @@ class ContasIterador:
 
 
 class Cliente:
+    LIMITE_TRANSACOES_DIARIAS = 10
+
     def __init__(self, endereco):
         self.endereco = endereco
         self.contas = []
         self.indice_conta = 0
 
     def realizar_transacao(self, conta, transacao):
-        # TODO: validar o número de transações e invalidar a operação se for necessário
-        # print("\n@@@ Você excedeu o número de transações permitidas para hoje! @@@")
+        transacoes_hoje = len(conta.historico.transacoes_do_dia())
+
+        if transacoes_hoje >= self.LIMITE_TRANSACOES_DIARIAS:
+            print("\n@@@ Você excedeu o número de transações permitidas para hoje! @@@")
+            return
+
         transacao.registrar(conta)
 
     def adicionar_conta(self, conta):
@@ -168,9 +174,10 @@ class Historico:
             if tipo_transacao is None or transacao["tipo"].lower() == tipo_transacao.lower():
                 yield transacao
 
-    # TODO: filtrar todas as transações realizadas no dia
     def transacoes_do_dia(self):
-        pass
+        hoje = datetime.now().strftime("%d-%m-%Y")
+        # a data é salva como "dd-mm-aaaa hh:mm:ss", então os 10 primeiros caracteres são o dia
+        return [transacao for transacao in self._transacoes if transacao["data"][:10] == hoje]
 
 
 class Transacao(ABC):
@@ -247,8 +254,24 @@ def recuperar_conta_cliente(cliente):
         print("\n@@@ Cliente não possui conta! @@@")
         return
 
-    # FIXME: não permite cliente escolher a conta
-    return cliente.contas[0]
+    if len(cliente.contas) == 1:
+        return cliente.contas[0]
+
+    print("\nContas do cliente:")
+    for i, conta in enumerate(cliente.contas, start=1):
+        print(f"[{i}] Agência {conta.agencia} - C/C {conta.numero}")
+
+    try:
+        escolha = int(input("Escolha a conta pelo número da lista: "))
+    except ValueError:
+        print("\n@@@ Opção inválida! @@@")
+        return
+
+    if escolha < 1 or escolha > len(cliente.contas):
+        print("\n@@@ Opção inválida! @@@")
+        return
+
+    return cliente.contas[escolha - 1]
 
 
 @log_transacao
@@ -346,7 +369,6 @@ def criar_conta(numero_conta, clientes, contas):
         print("\n@@@ Cliente não encontrado, fluxo de criação de conta encerrado! @@@")
         return
 
-    # NOTE: O valor padrão de limite de saques foi alterado para 50 saques
     conta = ContaCorrente.nova_conta(cliente=cliente, numero=numero_conta, limite=500, limite_saques=50)
     contas.append(conta)
     cliente.contas.append(conta)
