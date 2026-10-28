@@ -21,8 +21,10 @@ c = Cachorro("Chappie", "amarelo")
 c.falar()
 
 print("Ola mundo")
+print(c.nome)
 
 del c
+#print(c.nome) exemplo que ja tá destruído.
 
 print("Ola mundo")
 print("Ola mundo")
