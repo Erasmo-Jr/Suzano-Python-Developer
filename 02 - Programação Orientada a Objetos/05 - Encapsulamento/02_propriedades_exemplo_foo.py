@@ -20,4 +20,4 @@ print(foo.x)
 del foo.x
 print(foo.x)
 foo.x = 10
-print(foo.x) 
+print(foo.x)
