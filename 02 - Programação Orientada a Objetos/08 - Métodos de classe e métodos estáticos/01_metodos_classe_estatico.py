@@ -5,7 +5,7 @@ class Pessoa:
 
     @classmethod
     def criar_de_data_nascimento(cls, ano, mes, dia, nome):
-        idade = 2022 - ano
+        idade = 2026 - ano
         return cls(nome, idade)
 
     @staticmethod
@@ -13,7 +13,7 @@ class Pessoa:
         return idade >= 18
 
 
-p = Pessoa.criar_de_data_nascimento(1994, 3, 21, "Guilherme")
+p = Pessoa.criar_de_data_nascimento(2001, 1, 3, "Erasmo")
 print(p.nome, p.idade)
 
 print(Pessoa.e_maior_idade(18))
