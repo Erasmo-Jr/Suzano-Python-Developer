@@ -9,7 +9,8 @@ with open("requirements.txt") as f:
 setup(
     name="dio-desafio-pacote-processamento-imagem",
     version="0.0.10",
-    author="Charles",
+    author="Erasmo",
+    author_email="erasmojunior456@gmail.com",
     description="Processamento imagem usando Skimage",
     long_description=page_description,
     long_description_content_type="text/markdown",
